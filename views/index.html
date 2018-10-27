@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+<meta charset="UTF-8">
+<title>Notes</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 14px;
+    background-size: 200% 100% !important;
+    transform: translate3d(0, 0, 0);
+    background: linear-gradient(45deg, #49D49D 10%, #A2C7E5 90%);
+    height: 100vh
+}
+
+.user {
+    width: 90%;
+    max-width: 340px;
+    margin: 10vh auto;
+}
+
+.user__header {
+    text-align: center;
+    opacity: 1;
+}
+
+.user__title {
+    font-size: 14px;
+    margin-bottom: -10px;
+    font-weight: 500;
+    color: white;
+}
+
+.form {
+    margin-top: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    opacity: 1;
+}
+.btn {
+    display: block;
+    width: 100%;
+    padding: 7px;
+    -webkit-appearance: none;
+    outline: 0;
+    border: 0;
+    color: white;
+    background: #ABA194;
+    transition: 0.3s;    
+}
+.btn:hover{
+    background: darken(#ABA194, 5%);
+}
+</style>
+</head>
+<body>
+        <div class="user">
+                <header class="user__header">
+                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3219/logo.svg" alt="" />
+                    <h1 class="user_title" id="usertitle">Signup</h1>
+                </header>
+                <input type="text" id="username" placeholder="Username" class="form__input" />
+                    <button class="btn" id="rcstart" type="button">Record audio</button>
+                    <br>
+                    <button class="btn" id="rcstop" type="button">Stop audio</button>
+                    <br>
+                    <a href="" id="down" download="input.wav">
+                        <i class="material-icons">file_download</i>
+                    </a>
+                <form id="form" enc="multipart/form-data" style="display:block;" class="form">
+                    <button class="btn" id="play" type="button">Check audio</button>
+                    <input type="file" name="input" accept="audio/*">
+                    <button class="btn" id="signup" type="button">Register</button>
+                    <button class="btn" id="login" style="display: none;" type="button">Login</button>
+                </form>
+                <div class="error"></div>
+                <div id="log" class="message">Already have an account? Login</div>
+            </div>
+   
+<script>
+    $(document).ready(function(){
+        player=document.createElement('audio');
+        document.getElementById('play').addEventListener('click',function(){
+            player.play();
+        });
+        var audioBlob;
+        var audioChunks = [];
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+            const mediaRecorder = new MediaRecorder(stream);
+            document.getElementById('rcstart').addEventListener('click',function(){
+                console.log("STARTED")
+                mediaRecorder.start();
+            });
+            document.getElementById('rcstop').addEventListener('click',function(){
+                mediaRecorder.stop();
+                console.log("STOPPED")
+            });
+            mediaRecorder.ondataavailable=function(event){
+                audioChunks.push(event.data);
+            }        
+            mediaRecorder.onstop = function(e) {
+                audioBlob = new Blob(audioChunks,{ 'type' : 'audio/wav' });
+                console.log("STOPPING")
+                const audioUrl = URL.createObjectURL(audioBlob);
+                player.src=audioUrl;
+                document.getElementById('down').href=audioUrl
+                console.log(audioUrl);
+            }
+                                    
+            }).catch(function(err){
+                    console.log(err);
+                    swal("Error","Not supported","error")
+        });
+
+        document.getElementById('signup').addEventListener('click',function(e){
+            e.preventDefault();
+            var xhr=new XMLHttpRequest();
+            xhr.open("POST","http://localhost:3000/signup?name="+document.getElementById('username').value,false);
+            var formData = new FormData(document.getElementById('form'));
+            xhr.onreadystatechange=function(){
+                if(this.readyState==4){
+                    var x=JSON.parse(this.responseText);
+                    if(x.code=="OK"){
+                        window.location.href = '/dash';
+                    } else{
+                        swal({
+                            title:"Error",
+                            text:"Invalid details.",
+                            type:"error"
+                        });
+                    }
+                }
+            }
+            xhr.send(formData);
+        });
+        document.getElementById('login').addEventListener('click',function(e){
+            e.preventDefault();
+            var xhr=new XMLHttpRequest();
+            xhr.open("POST","http://localhost:3000/login",true);
+            var formData = new FormData(uploadForm);
+            xhr.onreadystatechange=function(){
+                if(this.readyState==4){
+                    var x=JSON.parse(this.responseText);
+                    if(x.code=="OK"){
+                        res.redirect('/dash');
+                    } else{
+                        swal({
+                            title:"Error",
+                            text:"Invalid details.",
+                            type:"error"
+                        });
+                    }
+                } 
+            }
+            xhr.send(formData);
+        });
+        document.getElementById('log').addEventListener('click',function(){
+            if(document.getElementById('log').innerHTML=="Already have an account? Login"){
+                document.getElementById('signup').style.display='none';
+                document.getElementById('login').style.display='block';
+                document.getElementById('username').style.display='none';
+                document.getElementById('log').innerHTML="Signup";
+                document.getElementById('usertitle').innerHTML="Login";
+            } else{
+                document.getElementById('signup').style.display='block';
+                document.getElementById('login').style.display='none';
+                document.getElementById('username').style.display='block';
+                document.getElementById('usertitle').innerHTML="Signup";
+                document.getElementById('log').innerHTML="Already have an account? Login"
+            }
+         });
+});
+</script>
+</body>
+</html>
