@@ -116,7 +116,7 @@
                 }
             }
             xhr.send();
-        })
+        });
     });
 
 function getDash(){
@@ -127,12 +127,12 @@ function getDash(){
                 var x=JSON.parse(this.responseText);
                 if(x.code=="OK"){
                     console.log(x);                
-                    var y=document.getElementsByClassName('collection');
+                    var y=document.getElementsByClassName('collection')[0];
                     while (y.firstChild) {
                         y.removeChild(y.firstChild);
                     }
                     for(var i=0;i<x.resp.length;i++){
-                        $('.collection').append(`<div class="collection-item">${x.resp[i]}<i class="material-icons postfix" onclick="getData(${x.resp[i]})">mode_edit</i></div>`)
+                        $('.collection').append(`<div class="collection-item">${x.resp[i]}<i class="material-icons postfix" onclick="getData('${x.resp[i]}')">mode_edit</i><i class="material-icons postfix" onclick="deleteMemo('${x.resp[i]}')">delete</i></div>`)
                     }
                 } else{
                     swal({
@@ -146,17 +146,36 @@ function getDash(){
         xhr.send();
 }
 
+function deleteMemo(name){
+    var xhr=new XMLHttpRequest();
+    xhr.open("POST","http://localhost:3000/deletememo",false);
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.onreadystatechange=function(){
+        if(this.readyState==4){
+             x=JSON.parse(this.responseText)
+            if(x.code=="OK"){
+                getDash();
+                } else{
+                    swal({
+                        title:"Error",
+                        text:"An error occured.",
+                        type:"error"
+                    });
+                }
+            }
+    }
+    xhr.send(JSON.stringify({memoname:name}));
+}
 function getData(name){
     var xhr=new XMLHttpRequest();
-    xhr.open("POST","http://localhost:3000/dashboard",true);
-
+    xhr.open("POST","http://localhost:3000/getmemo",true);
+    xhr.setRequestHeader("Content-Type","application/json")
     xhr.onreadystatechange=function(){
         if(this.readyState==4){
             var x=JSON.parse(this.responseText);
             if(x.code=="OK"){
-                console.log(x.resp);
-                document.getElementById('memoname').value=x.resp.memoname;
-                document.getElementById('memodata').value=x.resp.data;
+                document.getElementById('memoname').value=x.memo.memos[0].memoname;
+                document.getElementById('memodata').value=x.memo.memos[0].data;
                 $(".modal").modal("open");       
             } else{
                 swal({

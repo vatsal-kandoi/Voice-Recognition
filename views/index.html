@@ -159,7 +159,7 @@ body {
             e.preventDefault();
             var xhr=new XMLHttpRequest();
             xhr.open("POST","http://localhost:3000/login",true);
-            var formData = new FormData(uploadForm);
+            var formData = new FormData(document.getElementById('form'));
             xhr.onreadystatechange=function(){
                 if(this.readyState==4){
                     var x=JSON.parse(this.responseText);

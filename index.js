@@ -98,6 +98,7 @@ app.get('/dashboard',authorise,function(req,res){
 
 //DONE
 app.post('/getmemo',authorise,function(req,res){
+    console.log(req.body);
     if(req.body.name==undefined || req.body.memoname==undefined){
         res.status(400).send({code:'ERROR'});
     } else{
@@ -110,18 +111,11 @@ app.post('/addmemo',authorise,function(req,res){
     if(req.body.memoname==undefined || req.body.memodata==undefined){
         res.status(400).send({code:'ERROR'});
     } else {
+        console.log(req);
         addMemo(req,res)
     }
 });
 
-//DONE
-app.post('/editmemo',authorise,function(req,res){
-    if(req.body.memo.name==undefined || req.body.data=="" || req.body.memo.data==undefined || req.body.name==undefined){
-        res.status(400).send({code:'ENTER'});
-    } else {
-        editMemo(req,res);
-    }
-});
 
 //DONE
 app.post('/deletememo',authorise,function(req,res){
