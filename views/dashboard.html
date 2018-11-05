@@ -4,70 +4,64 @@
 <head>
 <meta charset="UTF-8">
 <title>Notes</title>
-<!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <!-- Latest compiled JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <style>
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+.btn1{
+    height:30px;
+}
 </style>
+
 </head>
 <body>
 <div id="modal1" class="modal modal-fixed-footer">
     <div class="modal-content">
-                    <div class="row">
-                    <form id="memo" class="col s12">
-                        <div class="row">
-                        <div class="input-field col s6">
-                          <i class="material-icons prefix">add_box</i>
-                          <input id="memoname" name="memoname" type="text" class="validate">
-                        </div>
-                        </div>
-                      <div class="row">
-                        <div class="input-field col s12">
-                          <textarea id="memodata" name="memodata" class="materialize-textarea"></textarea>
-                        </div>
-                      </div>
-                    </form>
-                    </div>
-    </div>
-    <div class="modal-footer">
         <div class="row">
-                <button class="col s3" id="close"><i class="material-icons prefix">close</i>Close</button><button class="col s3" id="submit"><i class="material-icons prefix">save</i>Submit</button>
+            <form id="memo" class="col s12">
+                <div class="row">
+                    <div class="input-field col s11">
+                        <input id="memoname" name="memoname" type="text" class="validate">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="memodata" name="memodata" class="materialize-textarea"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="">
+        <div class="row">
+            <button class="btn-floating btn-large waves-effect waves-light cyan" style="position:absolute;bottom:20px;right:80px;" id="close"><i class="material-icons postfix">close</i></button><button class="btn-floating btn-large waves-effect waves-light cyan" style="position:absolute;bottom:20px;right:10px;" id="submit"><i class="material-icons postfix">save</i></button>
         </div>
     </div>
 </div>
 <nav>
     <div class="nav-wrapper">
-    <a href="#" id="name" class="brand-logo"></a>
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><button class="btn waves-effect waves-light" id="logout">Logout</button></li>
-    </ul>
+    <div id="name" style="margin-left: 30px"class="brand-logo"></div>
+    <button class="btn waves-effect waves-light right" style="margin-right: 30px;margin-top: 15px;"id="logout">Logout</button>
     </div>
 </nav>            
-<div>
-    <ul class="collection">
-    </ul>
+<div style="margin-top: 20px;">
+    <div class="carousel">
+    </div>
 </div>
 <a style="position: absolute; bottom:30px;right:30px" onclick="openDialog();return false;" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
 <script>
     $(document).ready(function(){
+        
         $(".modal").modal();
-        getDash();
         document.getElementById('close').addEventListener('click',function(){
             $(".modal").modal("close");
         });
@@ -97,43 +91,37 @@
                 xhr.send(JSON.stringify({memoname:document.getElementById('memoname').value,memodata:document.getElementById('memodata').value,}));
             }
         });
-        document.getElementById('logout').addEventListener('click',function(){
-            console.log("Logging out");
-            var xhr=new XMLHttpRequest();
-            xhr.open("GET","http://localhost:3000/logout",true);
-            xhr.onreadystatechange=function(){
-                if(this.readyState==4){
-                    var x=JSON.parse(this.responseText);
-                    if(x.code=="OK"){
-                        window.location.href = '/';
-                    } else{
-                        swal({
-                            title:"Error",
-                            text:"Invalid details.",
-                            type:"error"
-                        });
-                    }
-                }
-            }
-            xhr.send();
-        });
+        getDash();
+   
     });
 
-function getDash(){
-    var xhr=new XMLHttpRequest();
+    function getDash(){
+        var xhr=new XMLHttpRequest();
         xhr.open("GET","http://localhost:3000/dashboard",true);
         xhr.onreadystatechange=function(){
             if(this.readyState==4){
                 var x=JSON.parse(this.responseText);
                 if(x.code=="OK"){
-                    console.log(x);                
-                    var y=document.getElementsByClassName('collection')[0];
+                    console.log(x);
+                    
+                    var y=document.getElementsByClassName('carousel')[0];
                     while (y.firstChild) {
                         y.removeChild(y.firstChild);
                     }
                     for(var i=0;i<x.resp.length;i++){
-                        $('.collection').append(`<div class="collection-item">${x.resp[i]}<i class="material-icons postfix" onclick="getData('${x.resp[i]}')">mode_edit</i><i class="material-icons postfix" onclick="deleteMemo('${x.resp[i]}')">delete</i></div>`)
+                        console.log(i)
+                        $('.carousel').append(`<a class="carousel-item" style="background-color:rgba(0,0,0,0.1)" href="#${i+1}!>
+                                <div style="width:150px;height:250px;position:relative">
+                                <div class="" style="margin-left:30px;margin-top:20px;">${x.resp[i]}</div>
+                                    
+                                <button class="btn-floating btn waves-effect waves-light cyan" onclick="getData('${x.resp[i]}')" style="position:absolute;bottom:20px;right:60px;"><i class="material-icons">mode_edit</i></button>
+                                <button class="btn-floating btn waves-effect waves-light cyan" onclick="deleteMemo('${x.resp[i]}')" style="position:absolute;bottom:20px;right:10px;"><i class="material-icons">delete</i></button>
+                                </div>
+                            </a>`
+                        )
                     }
+                    $('.carousel').carousel({indicators:true});
+                    document.getElementById('name').innerHTML="NAME"
                 } else{
                     swal({
                         title:"Error",
@@ -144,9 +132,9 @@ function getDash(){
             }
         }
         xhr.send();
-}
+    }
 
-function deleteMemo(name){
+    function deleteMemo(name){
     var xhr=new XMLHttpRequest();
     xhr.open("POST","http://localhost:3000/deletememo",false);
     xhr.setRequestHeader('Content-Type','application/json');
@@ -192,7 +180,7 @@ function openDialog(){
     document.getElementById('memo').reset();
     $('.modal').modal("open")
 }
+
 </script>
 </body>
-
 </html>

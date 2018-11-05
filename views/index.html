@@ -4,105 +4,88 @@
 <head>
 <meta charset="UTF-8">
 <title>Notes</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<!-- Latest compiled JavaScript -->
-<style>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     font-size: 14px;
     background-size: 200% 100% !important;
     transform: translate3d(0, 0, 0);
     background: linear-gradient(45deg, #49D49D 10%, #A2C7E5 90%);
-    height: 100vh
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
-
-.user {
-    width: 90%;
-    max-width: 340px;
-    margin: 10vh auto;
-}
-
-.user__header {
-    text-align: center;
-    opacity: 1;
-}
-
-.user__title {
-    font-size: 14px;
-    margin-bottom: -10px;
-    font-weight: 500;
-    color: white;
-}
-
-.form {
-    margin-top: 40px;
-    border-radius: 6px;
-    overflow: hidden;
-    opacity: 1;
-}
-.btn {
-    display: block;
-    width: 100%;
-    padding: 7px;
-    -webkit-appearance: none;
-    outline: 0;
-    border: 0;
-    color: white;
-    background: #ABA194;
-    transition: 0.3s;    
-}
-.btn:hover{
-    background: darken(#ABA194, 5%);
+.container{
+    background: white;
+    padding: 20px 25px;
+    border: 5px solid #26a69a;
+    width: 250px;
+    border-radius: 10px;
+    height: auto;
+    box-sizing: border-box;
+    position: relative;
 }
 </style>
 </head>
 <body>
-        <div class="user">
-                <header class="user__header">
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3219/logo.svg" alt="" />
-                    <h1 class="user_title" id="usertitle">Signup</h1>
-                </header>
-                <input type="text" id="username" placeholder="Username" class="form__input" />
-                    <button class="btn" id="rcstart" type="button">Record audio</button>
-                    <br>
-                    <button class="btn" id="rcstop" type="button">Stop audio</button>
-                    <br>
-                    <a href="" id="down" download="input.wav">
-                        <i class="material-icons">file_download</i>
-                    </a>
-                <form id="form" enc="multipart/form-data" style="display:block;" class="form">
-                    <button class="btn" id="play" type="button">Check audio</button>
-                    <input type="file" name="input" accept="audio/*">
-                    <button class="btn" id="signup" type="button">Register</button>
-                    <button class="btn" id="login" style="display: none;" type="button">Login</button>
-                </form>
-                <div class="error"></div>
-                <div id="log" class="message">Already have an account? Login</div>
+    <div class="container z-depth-4">
+    <div class="row">
+        <div class="fixed">
+            <div id="name-row" class="row">
+                <div class="input-field col s12">
+                <input id="name" placeholder="Enter name.." type="text" required>
+                </div>
             </div>
-   
+            <div class="row">
+                <button class="btn-floating btn waves-effect waves-light" style="margin:2px;background-color: #00bcd4" id="rcstart" type="button"><i class="material-icons">mic</i></button>
+                <button class="btn-floating btn waves-effect waves-light" style="margin:2px;background-color: #00bcd4" id="rcstop" type="button"><i class="material-icons">mic_off</i></button>
+                <a class="btn-floating btn waves-effect waves-light cyan" style="margin:2px"  href="" id="down" download="input.wav"><i class="material-icons">file_download</i></a>
+                <button class="btn-floating btn waves-effect waves-light cyan" style="margin:2px" id="play" type="button"><i id="play-icon" class="material-icons">play_arrow</i></button>
+            </div>
+            <form>
+                <div class="row">
+                        <div class = "file-field input-field">
+                            <div class = "btn col s3 cyan" style="border-radius:50%;">
+                                    <i class="material-icons">vertical_align_top</i>
+                                <input type = "file"  name="input" accept="audio/*"/>
+                            </div>    
+                            <div class = "file-path-wrapper col s9">
+                               <input class = "file-path validate" type = "text" placeholder = "Upload file" />
+                            </div>
+                        </div>
+                </div>
+                <button class="btn col s12 cyan" id="signup" type="button">Sign up</button>
+                <button class="btn col s12 cyan" id="login" style="display:none;" type="button">Login</button>
+            </form>
+            <div id="login-button" class="btn-floating btn-large waves-effect waves-light red" style="position:absolute;bottom:-20px;right:-20px;"><i class="material-icons">input</i></div>
+        </div>
+    </div>
+    </div>
 <script>
     $(document).ready(function(){
         player=document.createElement('audio');
         document.getElementById('play').addEventListener('click',function(){
-            player.play();
+            if(document.getElementById('play-icon').innerHTML=="play_arrow"){
+                player.play();
+                document.getElementById('play-icon').innerHTML="pause";
+            } else{
+                player.pause();
+                document.getElementById('play-icon').innerHTML="play_arrow";
+            }
         });
         var audioBlob;
         var audioChunks = [];
@@ -111,6 +94,11 @@ body {
             const mediaRecorder = new MediaRecorder(stream);
             document.getElementById('rcstart').addEventListener('click',function(){
                 console.log("STARTED")
+                var audioChunks = [];
+                player.pause();
+                document.getElementById('play-icon').innerHTML="play_arrow";
+                document.getElementById('rcstart').style.backgroundColor='red';
+                document.getElementById('rcstop').style.backgroundColor='#00bcd4';
                 mediaRecorder.start();
             });
             document.getElementById('rcstop').addEventListener('click',function(){
@@ -123,17 +111,19 @@ body {
             mediaRecorder.onstop = function(e) {
                 audioBlob = new Blob(audioChunks,{ 'type' : 'audio/wav' });
                 console.log("STOPPING")
+                document.getElementById('rcstop').style.backgroundColor="red";
+                document.getElementById('rcstart').style.backgroundColor="#00bcd4";
                 const audioUrl = URL.createObjectURL(audioBlob);
                 player.src=audioUrl;
-                document.getElementById('down').href=audioUrl
+                document.getElementById('down').href=audioUrl;
                 console.log(audioUrl);
             }
                                     
             }).catch(function(err){
                     console.log(err);
                     swal("Error","Not supported","error")
-        });
-
+        });    
+            
         document.getElementById('signup').addEventListener('click',function(e){
             e.preventDefault();
             var xhr=new XMLHttpRequest();
@@ -161,6 +151,7 @@ body {
             xhr.open("POST","http://localhost:3000/login",true);
             var formData = new FormData(document.getElementById('form'));
             xhr.onreadystatechange=function(){
+                console.log(xhr);
                 if(this.readyState==4){
                     var x=JSON.parse(this.responseText);
                     if(x.code=="OK"){
@@ -176,22 +167,16 @@ body {
             }
             xhr.send(formData);
         });
-        document.getElementById('log').addEventListener('click',function(){
-            if(document.getElementById('log').innerHTML=="Already have an account? Login"){
-                document.getElementById('signup').style.display='none';
-                document.getElementById('login').style.display='block';
-                document.getElementById('username').style.display='none';
-                document.getElementById('log').innerHTML="Signup";
-                document.getElementById('usertitle').innerHTML="Login";
-            } else{
-                document.getElementById('signup').style.display='block';
-                document.getElementById('login').style.display='none';
-                document.getElementById('username').style.display='block';
-                document.getElementById('usertitle').innerHTML="Signup";
-                document.getElementById('log').innerHTML="Already have an account? Login"
-            }
-         });
-});
+        document.getElementById('login-button').addEventListener('click',function(){
+            document.getElementById('signup').style.display="none";
+            document.getElementById('name-row').style.display="none";
+            document.getElementById('login').style.display="block";
+            document.getElementById('rcstop').style.backgroundColor='#00bcd4';
+            player.pause();
+            document.getElementById('play-icon').innerHTML="play_arrow";
+        });
+    });
+
 </script>
 </body>
 </html>

@@ -1,8 +1,10 @@
 function output=trainDataset(filename)
-disp(filename);
 x=sprintf("upload/%s.wav",filename);
+disp(x);
 code1=train(x);
-x=sprintf("trained/%s.csv",filename);
-csvwrite(x,code1);    
+table=array2table(code1);
+y=sprintf("trained/%s.xls",filename);
+disp(y);
+writetable(table,y);    
 output=1;
 end

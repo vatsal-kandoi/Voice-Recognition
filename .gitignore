@@ -1,6 +1,5 @@
 node_modules/
 .env
-matlab/
 upload/
-mdata/
 trained/
+data/

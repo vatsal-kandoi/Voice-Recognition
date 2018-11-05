@@ -27,7 +27,16 @@ var storage=multer.diskStorage({
         cb( null, req.query.name+".wav");
     }
 })
+var storage2=multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,"./upload/")
+    },
+    filename:function (req,file,cb) {
+        cb( null, "input.wav");
+    }
+})
 var upload=multer({storage:storage});
+var upload2=multer({storage:storage2});
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
@@ -61,7 +70,7 @@ app.post('/signup',upload.single('input'),function(req,res){
 });
 
 //VOICE
-app.post('/login',upload.single('input'),function(req,res){
+app.post('/login',upload2.single('input'),function(req,res){
     getData=spawn('matlab',['-nodisplay', '-nosplash','-nojvm','-r', 'testset(); exit;']);
     getData.stdout.on('data',function(d){
         console.log(d.toString('utf-8'));
