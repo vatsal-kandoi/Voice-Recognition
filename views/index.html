@@ -155,7 +155,7 @@ body {
                 if(this.readyState==4){
                     var x=JSON.parse(this.responseText);
                     if(x.code=="OK"){
-                        res.redirect('/dash');
+                        window.location.href='/dash';
                     } else{
                         swal({
                             title:"Error",

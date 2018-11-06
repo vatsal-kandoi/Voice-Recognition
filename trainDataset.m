@@ -2,9 +2,9 @@ function output=trainDataset(filename)
 x=sprintf("upload/%s.wav",filename);
 disp(x);
 code1=train(x);
-table=array2table(code1);
-y=sprintf("trained/%s.xls",filename);
+disp(code1);
+y=sprintf("trained/%s.csv",filename);
 disp(y);
-writetable(table,y);    
+csvwrite(y,code1);    
 output=1;
 end

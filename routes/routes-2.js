@@ -8,6 +8,7 @@ exports.getDash=function(req,res){
         }
         res.status(200).send({code:"OK",resp:send});
     }).catch(function(err){
+        console.log(err);
         res.status(500).send({code:500,resp:"Error"});
     });
 }

@@ -76,11 +76,12 @@ app.post('/login',upload2.single('input'),function(req,res){
         console.log(d.toString('utf-8'));
     });
     getData.stdout.on('close',function(d){
-        var x=fs.readFileSync('./exp.txt');
+        var x=fs.readFileSync('./exp.txt',{encoding:"utf-8"});
         if(x=="NOMATCH"){
             res.status(404).send({code:"Error"});
         } else{
-            jwt.sign(x,process.env.SECRET,function(err,token){
+            x=x.slice(0,x.length-4);
+            jwt.sign({name:x},process.env.SECRET,function(err,token){
                 res.cookie("Authorization",token,{httpOnly:true});
                 res.status(200).send({code:"OK",name:x});
             })
@@ -93,12 +94,14 @@ app.post('/login',upload2.single('input'),function(req,res){
 });
 
 app.get('/dash',authorise,function(req,res){
+    console.log("In dashboard");
     res.sendFile(__dirname+'/views/dashboard.html');
 })
 
 //DONE
 app.get('/dashboard',authorise,function(req,res){
     if(req.body.name==undefined){
+        console.log(20);
         res.status(401).send({code:"Unauthorised"});
     } else{
         getDash(req,res);
