@@ -44,7 +44,9 @@ exports.getMemo=function(req,res){
             if(docs==null){
                 res.status(404).send({code:"Not found"});
             } else{
-                res.status(200).send({code:"OK",memo:docs});
+                var x=docs.memos.filter(name=>name.memoname==req.body.memoname);
+                console.log(x)
+                res.status(200).send({code:"OK",memo:x});
             }
         }
     }).catch(function(err){

@@ -60,7 +60,25 @@
 <a style="position: absolute; bottom:30px;right:30px" onclick="openDialog();return false;" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
 <script>
     $(document).ready(function(){
-        
+        $('#logout').click('click',function(){
+            var xhr=new XMLHttpRequest();
+            xhr.open("GET","http://localhost:3000/logout",false);
+            xhr.onreadystatechange=function(){
+                    if(this.readyState==4){
+                        x=JSON.parse(this.responseText)
+                        if(x.code=="OK"){
+                            window.location.href = '/';
+                        } else{
+                            swal({
+                                title:"Error",
+                                text:"Invalid details.",
+                                type:"error"
+                            });
+                        }
+                    }
+                }
+                xhr.send();
+        });
         $(".modal").modal();
         document.getElementById('close').addEventListener('click',function(){
             $(".modal").modal("close");
@@ -73,7 +91,6 @@
                 xhr.open("POST","http://localhost:3000/addmemo",false);
                 xhr.setRequestHeader('Content-Type','application/json');
                 xhr.onreadystatechange=function(){
-                    console.log(xhr);
                     if(this.readyState==4){
                         x=JSON.parse(this.responseText)
                         if(x.code=="OK"){
@@ -159,8 +176,8 @@ function getData(name){
         if(this.readyState==4){
             var x=JSON.parse(this.responseText);
             if(x.code=="OK"){
-                document.getElementById('memoname').value=x.memo.memos[0].memoname;
-                document.getElementById('memodata').value=x.memo.memos[0].data;
+                document.getElementById('memoname').value=x.memo[0].memoname;
+                document.getElementById('memodata').value=x.memo[0].data;
                 $(".modal").modal("open");       
             } else{
                 swal({
