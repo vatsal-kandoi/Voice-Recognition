@@ -34,7 +34,7 @@ exports.db={
         return user.findOneAndUpdate({$and:[{name:name},{"memos.memoname":{$ne:data.memoname}}]},{$push:{memos:data}},{new:true});
     },
     handleDelete:function(name,memoname){
-        return user.findOneAndUpdate({$and:[{name:name},{"memos.memoname":memoname}]},{$pull:{memos:{name:memoname}}},{new:true});
+        return user.findOneAndUpdate({$and:[{name:name},{"memos.memoname":memoname}]},{$pull:{memos:{memoname:memoname}}},{new:true});
     },
     getData:function(name){
         return user.findOne({name:name});

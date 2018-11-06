@@ -56,7 +56,7 @@ body {
                 <a class="btn-floating btn waves-effect waves-light cyan" style="margin:2px"  href="" id="down" download="input.wav"><i class="material-icons">file_download</i></a>
                 <button class="btn-floating btn waves-effect waves-light cyan" style="margin:2px" id="play" type="button"><i id="play-icon" class="material-icons">play_arrow</i></button>
             </div>
-            <form>
+            <form id="form">
                 <div class="row">
                         <div class = "file-field input-field">
                             <div class = "btn col s3 cyan" style="border-radius:50%;">
@@ -127,7 +127,7 @@ body {
         document.getElementById('signup').addEventListener('click',function(e){
             e.preventDefault();
             var xhr=new XMLHttpRequest();
-            xhr.open("POST","http://localhost:3000/signup?name="+document.getElementById('username').value,false);
+            xhr.open("POST","http://localhost:3000/signup?name="+document.getElementById('name').value,false);
             var formData = new FormData(document.getElementById('form'));
             xhr.onreadystatechange=function(){
                 if(this.readyState==4){

@@ -54,8 +54,8 @@
     </div>
 </nav>            
 <div style="margin-top: 20px;">
-    <div class="carousel">
-    </div>
+    <ul class="collection">
+    </ul>
 </div>
 <a style="position: absolute; bottom:30px;right:30px" onclick="openDialog();return false;" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
 <script>
@@ -104,24 +104,21 @@
                 if(x.code=="OK"){
                     console.log(x);
                     
-                    var y=document.getElementsByClassName('carousel')[0];
+                    var y=document.getElementsByClassName('collection')[0];
                     while (y.firstChild) {
                         y.removeChild(y.firstChild);
                     }
                     for(var i=0;i<x.resp.length;i++){
                         console.log(i)
-                        $('.carousel').append(`<a class="carousel-item" style="background-color:rgba(0,0,0,0.1)" href="#${i+1}!>
-                                <div style="width:150px;height:250px;position:relative">
+                        $('.collection').append(`<div class="collection-item row">
                                 <div class="" style="margin-left:30px;margin-top:20px;">${x.resp[i]}</div>
-                                    
-                                <button class="btn-floating btn waves-effect waves-light cyan" onclick="getData('${x.resp[i]}')" style="position:absolute;bottom:20px;right:60px;"><i class="material-icons">mode_edit</i></button>
-                                <button class="btn-floating btn waves-effect waves-light cyan" onclick="deleteMemo('${x.resp[i]}')" style="position:absolute;bottom:20px;right:10px;"><i class="material-icons">delete</i></button>
+                                <button class="btn-floating btn waves-effect waves-light cyan" onclick="getData('${x.resp[i]}')" style="margin-right:30px;"><i class="material-icons">mode_edit</i></button>
+                                <button class="btn-floating btn waves-effect waves-light cyan" onclick="deleteMemo('${x.resp[i]}')" style="margin-right:10px;"><i class="material-icons">delete</i></button>
                                 </div>
-                            </a>`
+                            </div>`
                         )
-                    }
-                    $('.carousel').carousel({indicators:true});
-                    document.getElementById('name').innerHTML="NAME"
+                    }                   
+                    
                 } else{
                     swal({
                         title:"Error",
