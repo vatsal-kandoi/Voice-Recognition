@@ -62,7 +62,7 @@
     $(document).ready(function(){
         $('#logout').click('click',function(){
             var xhr=new XMLHttpRequest();
-            xhr.open("GET","http://localhost:3000/logout",false);
+            xhr.open("GET","http://"+window.location.hostname+":3000/logout",false);
             xhr.onreadystatechange=function(){
                     if(this.readyState==4){
                         x=JSON.parse(this.responseText)
@@ -88,7 +88,7 @@
                 console.log("Enter details")
             } else{
                 var xhr=new XMLHttpRequest();
-                xhr.open("POST","http://localhost:3000/addmemo",false);
+                xhr.open("POST","http://"+window.location.hostname+":3000/addmemo",false);
                 xhr.setRequestHeader('Content-Type','application/json');
                 xhr.onreadystatechange=function(){
                     if(this.readyState==4){
@@ -114,7 +114,7 @@
 
     function getDash(){
         var xhr=new XMLHttpRequest();
-        xhr.open("GET","http://localhost:3000/dashboard",true);
+        xhr.open("GET","http://"+window.location.hostname+":3000/dashboard",true);
         xhr.onreadystatechange=function(){
             if(this.readyState==4){
                 var x=JSON.parse(this.responseText);
@@ -151,7 +151,7 @@
 
     function deleteMemo(name){
     var xhr=new XMLHttpRequest();
-    xhr.open("POST","http://localhost:3000/deletememo",false);
+    xhr.open("POST","http://"+window.location.hostname+":3000/deletememo",false);
     xhr.setRequestHeader('Content-Type','application/json');
     xhr.onreadystatechange=function(){
         if(this.readyState==4){
@@ -171,7 +171,7 @@
 }
 function getData(name){
     var xhr=new XMLHttpRequest();
-    xhr.open("POST","http://localhost:3000/getmemo",true);
+    xhr.open("POST","http://"+window.location.hostname+":3000/getmemo",true);
     xhr.setRequestHeader("Content-Type","application/json")
     xhr.onreadystatechange=function(){
         if(this.readyState==4){

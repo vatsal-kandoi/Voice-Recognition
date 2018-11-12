@@ -127,7 +127,7 @@ body {
         document.getElementById('signup').addEventListener('click',function(e){
             e.preventDefault();
             var xhr=new XMLHttpRequest();
-            xhr.open("POST","http://localhost:3000/signup?name="+document.getElementById('name').value,false);
+            xhr.open("POST","http://"+window.location.hostname+"/signup?name="+document.getElementById('name').value,false);
             var formData = new FormData(document.getElementById('form'));
             xhr.onreadystatechange=function(){
                 if(this.readyState==4){
@@ -148,7 +148,7 @@ body {
         document.getElementById('login').addEventListener('click',function(e){
             e.preventDefault();
             var xhr=new XMLHttpRequest();
-            xhr.open("POST","http://localhost:3000/login",true);
+            xhr.open("POST","http://"+window.location.hostname+":3000/login",true);
             var formData = new FormData(document.getElementById('form'));
             xhr.onreadystatechange=function(){
                 console.log(xhr);
@@ -176,7 +176,6 @@ body {
             document.getElementById('play-icon').innerHTML="play_arrow";
         });
     });
-
 </script>
 </body>
 </html>

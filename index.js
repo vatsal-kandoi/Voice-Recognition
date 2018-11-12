@@ -29,7 +29,7 @@ var storage=multer.diskStorage({
 })
 var storage2=multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,"./upload/")
+        cb(null,"./upload/");
     },
     filename:function (req,file,cb) {
         cb( null, "input.wav");
