@@ -1,12 +1,12 @@
 function output=testset()
-v = train("upload/input.wav");
+v = train("/upload/input.wav");
 distmin = inf;
 k1 = 0;
 files = dir('trained');
 [m,n]=size(files);
 for i=3:m
     disp(files(i).name);
-    x=sprintf('trained/%s',files(i).name);
+    x=sprintf('/trained/%s',files(i).name);
     data=csvread(x);
     disp(data);
     %GET THE EUCLIDEAN DISTANCE
